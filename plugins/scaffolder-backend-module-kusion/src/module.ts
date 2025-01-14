@@ -19,8 +19,16 @@ import {
   coreServices,
 } from '@backstage/backend-plugin-api';
 import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
-import { createCreateWorkspaceAction } from './actions/workspace/createWorkspace';
-import { createCreateBackendAction } from './actions/backend/createBackend';
+import { createCreateOrganizationAction } from './actions/organization';
+import { createCreateProjectAction } from './actions/project';
+import {
+  createCreateWorkspaceAction,
+  createDeleteWorkspaceAction,
+} from './actions/workspace';
+import {
+  createCreateBackendAction,
+  createDeleteBackendAction,
+} from './actions/backend';
 
 /**
  * The Kusion Module for the Scaffolder Backend
@@ -40,9 +48,25 @@ export const kusionModule = createBackendModule({
           createCreateWorkspaceAction({
             config,
           }),
+          createDeleteWorkspaceAction({
+            config,
+          }),
         );
         scaffolder.addActions(
           createCreateBackendAction({
+            config,
+          }),
+          createDeleteBackendAction({
+            config,
+          }),
+        );
+        scaffolder.addActions(
+          createCreateOrganizationAction({
+            config,
+          }),
+        );
+        scaffolder.addActions(
+          createCreateProjectAction({
             config,
           }),
         );

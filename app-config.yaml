@@ -111,3 +111,7 @@ kubernetes:
 permission:
   # setting this to `false` will disable permissions
   enabled: true
+
+# kusion
+kusion:
+  baseUrl: ${KUSION_BASE_URL}

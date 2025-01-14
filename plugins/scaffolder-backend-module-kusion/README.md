@@ -10,8 +10,6 @@ You need to add the following to your `app-config.yaml`. For example:
 backend:
 kusion:
   baseUrl: 'http://localhost:3000'
-  proxyPath: '/api/v1' # Optional - Default is '/api/v1'
-  token: 'your-token'
 ```
 
 ### From your Backstage root directory

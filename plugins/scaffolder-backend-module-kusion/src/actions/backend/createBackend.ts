@@ -1,6 +1,10 @@
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { Config } from '@backstage/config';
-import { createKusionApi } from '../../api';
+import { configKusionApi } from '../../api';
+import {
+  BackendService,
+  CreateBackendData,
+} from '@kusionstack/kusion-api-client-sdk';
 import { examples } from './createBackend.example';
 
 /**
@@ -73,11 +77,13 @@ export function createCreateBackendAction(options: { config: Config }) {
     },
     async handler(ctx) {
       const { name, description, backendConfig } = ctx.input;
-      const kusionApi = createKusionApi({ configApi: config });
-      const requestBody = {
-        name,
-        description,
-        backendConfig,
+      configKusionApi({ configApi: config });
+      const requestBody: CreateBackendData = {
+        body: {
+          name: name,
+          description: description,
+          backendConfig: backendConfig,
+        },
       };
 
       ctx.logger.info(
@@ -85,21 +91,21 @@ export function createCreateBackendAction(options: { config: Config }) {
         requestBody,
       );
 
-      const response = await kusionApi.post('backends', requestBody);
+      const response = await BackendService.createBackend(requestBody);
 
-      if (!response.success || response.data === undefined) {
+      if (!response.data?.success) {
         ctx.logger.error(`
-          Unable to create backend, ${response.message}`);
-        ctx.output('success', response.success);
-        ctx.output('message', response.message);
-        ctx.output('data', '{}');
-        throw new Error(`Unable to create backend, ${response.message}`);
+          Unable to create backend, ${response.data?.message}`);
+        ctx.output('success', response.data?.success);
+        ctx.output('message', response.data?.message);
+        ctx.output('data', JSON.stringify(response.data?.data));
+        throw new Error(`Unable to create backend, ${response.data?.message}`);
       }
 
       ctx.logger.info('Backend created successfully');
-      ctx.output('success', response.success);
-      ctx.output('message', response.message);
-      ctx.output('data', JSON.stringify(response.data));
+      ctx.output('success', response.data?.success);
+      ctx.output('message', response.data?.message);
+      ctx.output('data', JSON.stringify(response.data?.data));
     },
   });
 }

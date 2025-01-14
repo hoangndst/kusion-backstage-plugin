@@ -18,57 +18,52 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { Config } from '@backstage/config';
 import { configKusionApi } from '../../api';
 import {
-  WorkspaceService,
-  CreateWorkspaceData,
+  OrganizationService,
+  CreateOrganizationData,
 } from '@kusionstack/kusion-api-client-sdk';
-import { examples } from './createWorkspace.example';
+import { examples } from './createOrganization.example';
 
 /**
- * Creates an `kusion:workspace:create` Scaffolder action.
+ * Creates an `kusion:organization:create` Scaffolder action.
 
  * @public
  */
-export function createCreateWorkspaceAction(options: { config: Config }) {
+export function createCreateOrganizationAction(options: { config: Config }) {
   const { config } = options;
   return createTemplateAction<{
     name: string;
     description: string;
     labels: string[];
     owners: string[];
-    backendID: number;
   }>({
-    id: 'kusion:workspace:create',
+    id: 'kusion:organization:create',
     examples,
     schema: {
       input: {
         type: 'object',
-        required: ['name', 'owners', 'backendID'],
+        required: ['owners'],
         properties: {
           name: {
-            title: 'Workspace Name',
+            title: 'Organization Name',
             type: 'string',
           },
           description: {
-            title: 'Workspace Description',
+            title: 'Organization Description',
             type: 'string',
           },
           labels: {
-            title: 'Workspace Labels',
+            title: 'Organization Labels',
             type: 'array',
             items: {
               type: 'string',
             },
           },
           owners: {
-            title: 'Workspace Owners',
+            title: 'Organization Owners',
             type: 'array',
             items: {
               type: 'string',
             },
-          },
-          backendID: {
-            title: 'Backend ID',
-            type: 'number',
           },
         },
       },
@@ -91,24 +86,23 @@ export function createCreateWorkspaceAction(options: { config: Config }) {
       },
     },
     async handler(ctx) {
-      const { name, description, labels, owners, backendID } = ctx.input;
+      const { name, description, labels, owners } = ctx.input;
       configKusionApi({ configApi: config });
-      const requestBody: CreateWorkspaceData = {
+      const requestBody: CreateOrganizationData = {
         body: {
           name: name,
           description: description,
           labels: labels,
           owners: owners,
-          backendID: backendID,
         },
       };
-
       ctx.logger.info(
-        'Creating workspace with the following request body: ',
+        'Creating organization with the following request body: ',
         requestBody,
       );
-
-      const response = await WorkspaceService.createWorkspace(requestBody);
+      const response = await OrganizationService.createOrganization(
+        requestBody,
+      );
 
       if (!response.data?.success) {
         ctx.logger.error(`
@@ -117,10 +111,10 @@ export function createCreateWorkspaceAction(options: { config: Config }) {
         ctx.output('message', response.data?.message);
         ctx.output('data', JSON.stringify(response.data?.data));
         throw new Error(
-          `Unable to create workspace, ${response.data?.message}`,
+          `Unable to create organization, ${response.data?.message}`,
         );
       }
-      ctx.logger.info('Workspace created successfully');
+      ctx.logger.info('Organization created successfully');
       ctx.output('success', response.data?.success);
       ctx.output('message', response.data?.message);
       ctx.output('data', JSON.stringify(response.data?.data));

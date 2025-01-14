@@ -1,1 +1,2 @@
-export * from "../workspace"
+export * from "./createWorkspace";
+export * from "./deleteWorkspace";
