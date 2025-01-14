@@ -15,39 +15,25 @@
  */
 
 import { Config } from '@backstage/config';
-import fetch, { RequestInit } from 'node-fetch';
+import { client } from '@kusionstack/kusion-api-client-sdk';
 
 type Options = {
   configApi: Config;
 };
 
-export const createKusionApi = (option: Options) => {
+export const configKusionApi = (option: Options) => {
   const { configApi } = option;
-  const getApiUrl = async (
-    { serviceName }: { serviceName?: string },
-    { params }: { params?: string } = {},
-  ): Promise<string> => {
+  const getApiUrl = () => {
     const kusionBaseUrl = configApi.getOptionalString('kusion.baseUrl');
     if (!kusionBaseUrl) {
       throw new Error('backstage config kusion.baseUrl is required');
     }
 
-    const proxyPath =
-      configApi.getOptionalString('kusion.proxyPath') || DEFAULT_PROXY_PATH;
-
-    let url = `${kusionBaseUrl}${proxyPath}`;
-
-    if (serviceName) {
-      url += `/${serviceName}`;
-    }
-    if (params) {
-      url += `/${params}`;
-    }
-
-    return url.replace(/\/$/, '');
+    return kusionBaseUrl;
   };
 
-  const getKusionToken = async () => {
+  // TODO: Wait for the Kusion Server to support authentication.
+  const getKusionToken = () => {
     const token = configApi.getOptionalString('kusion.token');
     if (!Boolean(token) || token?.length === 0) {
       throw new Error('backstage config kusion.token is required');
@@ -55,68 +41,7 @@ export const createKusionApi = (option: Options) => {
     return token;
   };
 
-  const post = async (
-    serviceName: string,
-    body: any,
-    params?: string,
-  ): Promise<KusionResponse> => {
-    try {
-      const url = await getApiUrl({ serviceName }, { params });
-      const requestOption: RequestInit = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${await getKusionToken()}`,
-        },
-        body: JSON.stringify(body),
-      };
-
-      const response = await fetch(url, requestOption);
-
-      if (!response.ok) {
-        throw new Error(
-          `Failed to create ${serviceName}: ${response.statusText}`,
-        );
-      }
-
-      return (await response.json()) as KusionResponse;
-    } catch (error) {
-      throw new Error(`Error in post request to ${serviceName}: ${error}`);
-    }
-  };
-
-  const put = async (
-    serviceName: string,
-    body: any,
-    params?: string,
-  ): Promise<KusionResponse> => {
-    try {
-      const url = await getApiUrl({ serviceName }, { params });
-      const requestOption: RequestInit = {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${await getKusionToken()}`,
-        },
-        body: JSON.stringify(body),
-      };
-
-      const response = await fetch(url, requestOption);
-
-      if (!response.ok) {
-        throw new Error(
-          `Failed to update ${serviceName}: ${response.statusText}`,
-        );
-      }
-
-      return (await response.json()) as KusionResponse;
-    } catch (error) {
-      throw new Error(`Error in put request to ${serviceName}: ${error}`);
-    }
-  };
-
-  return {
-    post,
-    put,
-  };
+  client.setConfig({
+    baseUrl: getApiUrl(),
+  });
 };

@@ -7006,6 +7006,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hey-api/client-fetch@npm:^0.5.2":
+  version: 0.5.3
+  resolution: "@hey-api/client-fetch@npm:0.5.3"
+  checksum: 10c0/04e8271d09197d78890d0cfb124eefed7d38156a7dd4e578f2d083083569845cea7803744e0abf3f54cb518cb0ad3d4cbc5f082ac5aa66ec5057d96d4a5e0fac
+  languageName: node
+  linkType: hard
+
 "@httptoolkit/httpolyglot@npm:^2.2.1":
   version: 2.2.2
   resolution: "@httptoolkit/httpolyglot@npm:2.2.2"
@@ -7648,10 +7655,20 @@ __metadata:
     "@backstage/config": "npm:^1.3.0"
     "@backstage/plugin-scaffolder-node": "npm:^0.6.0"
     "@backstage/plugin-scaffolder-node-test-utils": "npm:^0.1.15"
+    "@kusionstack/kusion-api-client-sdk": "npm:^1.1.3"
     node-fetch: "npm:^2.7.0"
     yaml: "npm:^2.6.1"
   languageName: unknown
   linkType: soft
+
+"@kusionstack/kusion-api-client-sdk@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "@kusionstack/kusion-api-client-sdk@npm:1.1.3"
+  dependencies:
+    "@hey-api/client-fetch": "npm:^0.5.2"
+  checksum: 10c0/c6e641f5c37ff230d45fd4dfd98015f8f2d77fbb176fe9739cf5858363663f7f71ff4c938edf8a28b66e7f6b5febc7f8306098380fbd90b5d4fe4c32f777f607
+  languageName: node
+  linkType: hard
 
 "@leichtgewicht/ip-codec@npm:^2.0.1":
   version: 2.0.5

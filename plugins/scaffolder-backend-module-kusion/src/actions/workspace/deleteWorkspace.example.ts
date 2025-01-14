@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-const DEFAULT_PROXY_PATH = '/api/v1';
+import { TemplateExample } from '@backstage/plugin-scaffolder-node';
+import yaml from 'yaml';
 
-type KusionResponse = {
-  success: boolean;
-  message: string;
-  data?: any;
-  traceID?: string;
-  startTime?: Date;
-  endTime?: Date;
-  costTime?: number;
-};
+export const examples: TemplateExample[] = [
+  {
+    description: 'Delete a workspace in Kusion',
+    example: yaml.stringify({
+      steps: [
+        {
+          id: 'delete-workspace',
+          action: 'kusion:workspace:delete',
+          name: 'Delete workspace',
+          input: {
+            id: '1',
+          },
+        },
+      ],
+    }),
+  },
+];

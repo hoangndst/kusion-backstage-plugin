@@ -18,57 +18,31 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { Config } from '@backstage/config';
 import { configKusionApi } from '../../api';
 import {
-  WorkspaceService,
-  CreateWorkspaceData,
+  BackendService,
+  DeleteBackendData,
 } from '@kusionstack/kusion-api-client-sdk';
-import { examples } from './createWorkspace.example';
+import { examples } from './deleteBackend.example';
 
 /**
- * Creates an `kusion:workspace:create` Scaffolder action.
-
+ * Creates a `kusion:backend:delete` Scaffolder action.
+ *
  * @public
  */
-export function createCreateWorkspaceAction(options: { config: Config }) {
+export function createDeleteBackendAction(options: { config: Config }) {
   const { config } = options;
   return createTemplateAction<{
-    name: string;
-    description: string;
-    labels: string[];
-    owners: string[];
-    backendID: number;
+    id: string;
   }>({
-    id: 'kusion:workspace:create',
+    id: 'kusion:backend:delete',
     examples,
     schema: {
       input: {
         type: 'object',
-        required: ['name', 'owners', 'backendID'],
+        required: ['id'],
         properties: {
-          name: {
-            title: 'Workspace Name',
-            type: 'string',
-          },
-          description: {
-            title: 'Workspace Description',
-            type: 'string',
-          },
-          labels: {
-            title: 'Workspace Labels',
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-          },
-          owners: {
-            title: 'Workspace Owners',
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-          },
-          backendID: {
+          id: {
             title: 'Backend ID',
-            type: 'number',
+            type: 'string',
           },
         },
       },
@@ -91,39 +65,32 @@ export function createCreateWorkspaceAction(options: { config: Config }) {
       },
     },
     async handler(ctx) {
-      const { name, description, labels, owners, backendID } = ctx.input;
+      const { id } = ctx.input;
       configKusionApi({ configApi: config });
-      const requestBody: CreateWorkspaceData = {
-        body: {
-          name: name,
-          description: description,
-          labels: labels,
-          owners: owners,
-          backendID: backendID,
+
+      ctx.logger.info('Deleting backend with ID: %s', id);
+
+      const request: DeleteBackendData = {
+        path: {
+          backendID: Number(id),
         },
       };
 
-      ctx.logger.info(
-        'Creating workspace with the following request body: ',
-        requestBody,
-      );
-
-      const response = await WorkspaceService.createWorkspace(requestBody);
+      const response = await BackendService.deleteBackend(request);
 
       if (!response.data?.success) {
         ctx.logger.error(`
-          Unable to create backend, ${response.data?.message}`);
+            Unable to delete backend, ${response.data?.message}`);
         ctx.output('success', response.data?.success);
         ctx.output('message', response.data?.message);
         ctx.output('data', JSON.stringify(response.data?.data));
-        throw new Error(
-          `Unable to create workspace, ${response.data?.message}`,
-        );
+        throw new Error(`Unable to delete backend, ${response.data?.message}`);
       }
-      ctx.logger.info('Workspace created successfully');
+
+      ctx.logger.info('Backend deleted successfully');
       ctx.output('success', response.data?.success);
       ctx.output('message', response.data?.message);
-      ctx.output('data', JSON.stringify(response.data?.data));
+      ctx.output('data', response.data?.data);
     },
   });
 }
