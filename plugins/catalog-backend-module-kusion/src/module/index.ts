@@ -1,0 +1,1 @@
+export { catalogModuleKusionEntityProvider as default } from './catalogModuleKusionEntityProvider';
