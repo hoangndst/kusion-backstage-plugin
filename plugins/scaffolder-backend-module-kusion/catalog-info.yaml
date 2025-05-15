@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backstage-plugin-scaffolder-backend-module-kusion
+  title: '@kusionstack/plugin-scaffolder-backend-module-kusion'
+  description: The kusion backend module for the scaffolder plugin provide by KusionStack team
+spec:
+  lifecycle: experimental
+  type: backstage-backend-plugin-module
+  owner: maintainers

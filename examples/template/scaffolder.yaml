@@ -1,0 +1,65 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: create-kusion-backend
+  title: Create Kusion Backend
+  description: Template to create a new Kusion Backend.
+spec:
+  owner: KusionStack
+  type: service
+
+  parameters:
+    - title: Backend Information
+      required:
+        - name
+        - backendType
+      properties:
+        name:
+          title: Backend Name
+          type: string
+          description: The name of the backend to create.
+          pattern: ^[a-zA-Z0-9_-]+$
+
+        description:
+          title: Backend Description
+          type: string
+          description: A description for the backend.
+        backendType:
+          title: Backend Type
+          type: string
+          description: The type of backend (e.g., local, s3, etc).
+          enum:
+            - local
+            - oss
+            - s3
+            - google
+        markdown:
+          type: 'null' # Needs to be quoted
+          description: |
+            ### ❗ **Important**: Please fill in the backend configs according to the backend type.
+            * [Kusion Backend concepts](https://www.kusionstack.io/docs/concepts/backend/overview)
+        backendConfigs:
+          title: Backend Configs
+          type: object
+          additionalProperties:
+            type: string
+          description: Key-value pairs for backend configuration.
+        
+  steps:
+    - id: createBackend
+      name: Create Backend
+      action: kusion:backend:create
+      input:
+        name: ${{ parameters.name }}
+        description: ${{ parameters.description }}
+        backendConfig:
+          type: ${{ parameters.backendType }}
+          configs: ${{ parameters.backendConfigs }}
+
+  output:
+    text:
+      - title: Information
+        content: |
+          * success: ${{ steps.createBackend.output.success }}
+          * message: ${{ steps.createBackend.output.message }}
+          * data: ${{ steps.createBackend.output.data }}

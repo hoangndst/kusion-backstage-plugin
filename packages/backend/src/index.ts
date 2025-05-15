@@ -51,4 +51,7 @@ backend.add(import('@backstage/plugin-search-backend-module-techdocs'));
 // kubernetes
 backend.add(import('@backstage/plugin-kubernetes-backend'));
 
+// kusion
+backend.add(import('@kusionstack/plugin-scaffolder-backend-module-kusion'));
+
 backend.start();
