@@ -57,7 +57,7 @@ jobs:
         uses: backstage/changesets-action@291bfc1f76d1dcfbf967f5810dc0423592eae09a # v2.3.1
         with:
           title: Version Packages
-          version: yarn changeset version
+          version: yarn release
           skipRootChangelogUpdate: true
         env:
           GITHUB_TOKEN: ${{ secrets.KUSIONSTACK_BOT_TOKEN }}
