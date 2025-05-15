@@ -1,59 +1,85 @@
-## Backstage Plugin Scaffolder Backend Module Kusion
+# Backstage Scaffolder Backend Module for Kusion
 
-### Getting Started
+## Overview
 
-You need a `Kusion Server` running. You can find the server [here](https://github.com/KusionStack/kusion).
+This plugin integrates [KusionStack](https://github.com/KusionStack/kusion) with Backstage's scaffolder backend, enabling you to create and manage Kusion backends directly from Backstage templates.
 
-You need to add the following to your `app-config.yaml`. For example:
+---
+
+## Prerequisites
+
+- A running [Kusion Server](https://github.com/KusionStack/kusion)
+- A Backstage instance (see [Backstage documentation](https://backstage.io/docs/getting-started/))
+
+---
+
+## Installation
+
+From your Backstage root directory, install the plugin:
+
+```bash
+yarn add --cwd packages/backend @kusionstack/plugin-scaffolder-backend-module-kusion
+```
+
+---
+
+## Configuration
+
+Add the following configuration to your `app-config.yaml` to specify the Kusion server endpoint:
 
 ```yaml
 backend:
-kusion:
-  baseUrl: 'http://localhost:3000'
+  kusion:
+    baseUrl: 'http://localhost:3000' # Replace with your Kusion server URL
 ```
 
-### From your Backstage root directory
+---
 
-```bash
-# From your Backstage root directory
-yarn add --cwd packages/backend @kusion/backstage-plugin-scaffolder-backend-module-kusion
+## Backend Integration
+
+Import and register the plugin in your Backstage backend:
+
+Edit `packages/backend/src/index.ts`:
+
+```typescript
+// Import and register the Kusion scaffolder backend module
+backend.add(import('@kusionstack/plugin-scaffolder-backend-module-kusion'));
 ```
 
-### Workspace
+---
 
-#### Kusion Create Workspace
+## Usage Example
 
-The Kusion Workspace Create action that allows you to create a new Kusion Workspace from a template.
+### Kusion Backend Creation Template.
 
-`kusion:workspace:create`
+`kusion:backend:create`
 
 ```yaml
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: create-workspace
-  title: Create Workspace Template
-  description: A template to create a workspace
-tags:
-  - kusion
-  - workspace
+  name: create-kusion-backend
+  title: Create Kusion Backend
+  description: Template to create a new Kusion Backend.
 spec:
+  owner: KusionStack
+  type: service
   steps:
-    - id: create-workspace
-      name: Create Workspace
-      action: kusion:workspace:create
+    - id: createBackend
+      name: Create Backend
+      action: kusion:backend:create
       input:
         name: ${{ parameters.name }}
         description: ${{ parameters.description }}
-        labels: ${{ parameters.labels }}
-        owners: ${{ parameters.owners }}
-        backendID: ${{ parameters.backend_id }}
+        backendConfig:
+          type: ${{ parameters.backendType }}
+          configs: ${{ parameters.backendConfigs }}
+
   output:
     text:
-      - title: Workspace create status
-        description: The status of workspace creation
-          content: |
-          Success: `${{ steps['create-workspace'].output.success }}`
-          Message: `${{ steps['create-workspace'].output.message }}`
-          Data: `${{ steps['create-workspace'].output.data }}`
+      - title: Information
+        content: |
+          * success: ${{ steps.createBackend.output.success }}
+          * message: ${{ steps.createBackend.output.message }}
+          * data: ${{ steps.createBackend.output.data }}
 ```

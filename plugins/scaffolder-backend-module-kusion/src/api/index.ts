@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 KusionStack
+ * Copyright 2025 KusionStack
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,15 +30,6 @@ export const configKusionApi = (option: Options) => {
     }
 
     return kusionBaseUrl;
-  };
-
-  // TODO: Wait for the Kusion Server to support authentication.
-  const getKusionToken = () => {
-    const token = configApi.getOptionalString('kusion.token');
-    if (!Boolean(token) || token?.length === 0) {
-      throw new Error('backstage config kusion.token is required');
-    }
-    return token;
   };
 
   client.setConfig({

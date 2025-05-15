@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Backstage Authors
+ * Copyright 2025 KusionStack
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,15 +30,15 @@ export const examples: TemplateExample[] = [
             name: 'my-backend',
             description: 'This is my backend',
             backendConfig: {
-              "configs": {
-                "region": "string",
-                "endpoint": "string",
-                "accessKeyID": "string",
-                "accessKeySecret": "string",
-                "bucket": "string",
-                "prefix": "string",
+              configs: {
+                region: 'string',
+                endpoint: 'string',
+                accessKeyID: 'string',
+                accessKeySecret: 'string',
+                bucket: 'string',
+                prefix: 'string',
               },
-              "type": "s3"
+              type: 's3',
             },
           },
         },

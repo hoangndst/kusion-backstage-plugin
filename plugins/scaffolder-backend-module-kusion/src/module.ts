@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 The Backstage Authors
+ * Copyright 2025 KusionStack
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,8 @@ import {
 import { scaffolderActionsExtensionPoint } from '@backstage/plugin-scaffolder-node/alpha';
 import { createCreateOrganizationAction } from './actions/organization';
 import { createCreateProjectAction } from './actions/project';
-import {
-  createCreateWorkspaceAction,
-  createDeleteWorkspaceAction,
-} from './actions/workspace';
-import {
-  createCreateBackendAction,
-  createDeleteBackendAction,
-} from './actions/backend';
+import { createCreateWorkspaceAction } from './actions/workspace';
+import { createCreateBackendAction } from './actions/backend';
 
 /**
  * The Kusion Module for the Scaffolder Backend
@@ -48,15 +42,9 @@ export const kusionModule = createBackendModule({
           createCreateWorkspaceAction({
             config,
           }),
-          createDeleteWorkspaceAction({
-            config,
-          }),
         );
         scaffolder.addActions(
           createCreateBackendAction({
-            config,
-          }),
-          createDeleteBackendAction({
             config,
           }),
         );
