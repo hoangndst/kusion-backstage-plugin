@@ -22,7 +22,7 @@ import * as url from 'url';
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 const baseOptions = {
-  owner: 'hoangndst',
+  owner: 'KusionStack',
   repo: 'kusion-backstage-plugin',
 };
 
