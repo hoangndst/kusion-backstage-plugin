@@ -27,6 +27,10 @@ This should open a local instance of Backstage in your browser, otherwise open o
 
 By default, Backstage will start on port 3000, however you can override this by setting an environment variable `PORT` on your local machine. e.g. `export PORT=8080` then running `yarn dev`. Or `PORT=8080 yarn dev`.
 
+## Create a new plugin
+
+Follow the [Backstage plugin documentation](https://backstage.io/docs/plugins/create-a-plugin) to create a new plugin.
+
 ## Coding Guidelines
 
 We use the backstage-cli to build, serve, lint, test and package all the plugins.
