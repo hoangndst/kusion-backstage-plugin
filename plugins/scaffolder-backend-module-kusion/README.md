@@ -1,4 +1,5 @@
 # Backstage Scaffolder Backend Module for Kusion
+[![NPM Version](https://img.shields.io/npm/v/%40kusionstack%2Fplugin-scaffolder-backend-module-kusion)](https://www.npmjs.com/package/@kusionstack/plugin-scaffolder-backend-module-kusion)
 
 ## Overview
 
